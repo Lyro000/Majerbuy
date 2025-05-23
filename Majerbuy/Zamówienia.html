@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Zamówienia – Majerbuy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f2f7fb;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(90deg, #007acc, #4da6ff);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    nav {
+      background-color: #e6e6e6;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    nav a {
+      text-decoration: none;
+      color: #007acc;
+      font-weight: bold;
+    }
+    nav a:hover {
+      color: #005f99;
+    }
+    .container {
+      max-width: 960px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .product {
+      background: #f7fbff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .product h3 {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header><h1>Majerbuy</h1></header>
+  <nav>
+    <a href="index.html">Strona główna</a>
+    <a href="Buty.html">Buty</a>
+    <a href="Odzież.html">Odzież</a>
+    <a href="Akcesoria.html">Akcesoria</a>
+    <a href="Zamówienia.html">Zamówienia</a>
+    <a href="Logowanie.html">Logowanie</a>
+  </nav>
+  <div class="container">
+    <h2>Twoje zamówienia</h2>
+    <div id="orders">
+      <p>Sprawdzanie stanu logowania...</p>
+    </div>
+  </div>
+
+  <script>
+    const user = sessionStorage.getItem('loggedUser');
+    if (user) {
+      document.getElementById('orders').innerHTML = `
+        <p>Zamówienia użytkownika <strong>${user}</strong>:</p>
+        <ul>
+          <li>Kurtka puchowa – 1 szt. – 249,99 zł</li>
+          <li>Czapka z daszkiem – 2 szt. – 59,98 zł</li>
+        </ul>
+      `;
+    } else {
+      document.getElementById('orders').innerHTML = `
+        <p>Musisz być <a href="Logowanie.html">zalogowany</a>, aby zobaczyć zamówienia.</p>
+      `;
+    }
+  </script>
+</body>
+</html>

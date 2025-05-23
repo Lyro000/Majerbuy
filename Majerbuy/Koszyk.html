@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy - Koszyk</title>
+<style>
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f9ff; color: #374151; min-height: 100vh; display: flex; flex-direction: column;
+  }
+  nav {
+    background-color: #2563eb; display: flex; justify-content: space-between; align-items: center; padding: 14px 30px; font-weight: 700;
+  }
+  nav .nav-left a,
+  nav .nav-right a,
+  nav .nav-right span {
+    color: white; text-decoration: none; margin-left: 20px; font-size: 1.1rem; position: relative; transition: color 0.3s ease;
+  }
+  nav .nav-left a:first-child {
+    margin-left: 0;
+  }
+  nav .nav-left a:hover,
+  nav .nav-right a:hover,
+  nav .nav-left a.active {
+    color: #bfdbfe;
+  }
+  nav .nav-left a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 0; width: 100%; height: 3px; background: #bfdbfe; border-radius: 3px;
+  }
+  nav .nav-right a {
+    cursor: pointer;
+  }
+  main {
+    flex-grow: 1;
+    padding: 40px 30px 50px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-weight: 900;
+    font-size: 2.4rem;
+    margin-bottom: 30px;
+    color: #2563eb;
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgb(37 99 235 / 0.25);
+  }
+  th, td {
+    padding: 12px 18px;
+    text-align: left;
+  }
+  th {
+    background-color: #2563eb;
+    color: white;
+    font-weight: 700;
+  }
+  tbody tr:nth-child(odd) {
+    background: #e0e7ff;
+  }
+  .qty-controls button {
+    background: #2563eb;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  .qty-controls button:hover {
+    background: #1d4ed8;
+  }
+  .remove-btn {
+    background: #dc2626;
+    border: none;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .remove-btn:hover {
+    background: #b91c1c;
+  }
+  .order-btn {
+    background: #2563eb;
+    border: none;
+    color: white;
+    padding: 14px 24px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 20px;
+    float: right;
+  }
+  .order-btn:hover {
+    background: #1d4ed8;
+  }
+  .empty-cart {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-top: 50px;
+    color: #6b7280;
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <a href="index.html" id="nav-home">Strona główna</a>
+    <a href="odziez.html" id="nav-odziez">Odzież</a>
+    <a href="buty.html" id="nav-buty">Buty</a>
+    <a href="akcesoria.html" id="nav-akcesoria">Akcesoria</a>
+    <a href="koszyk.html" id="nav-koszyk" class="active">Koszyk</a>
+  </div>
+  <div class="nav-right" id="navAuthLinks"></div>
+</nav>
+
+<main>
+  <h1>Twój koszyk</h1>
+  <div id="cartContainer"></div>
+</main>
+
+<script>
+  // Ten sam skrypt logowania/paska z index.html
+</script>
+
+<script>
+  document.getElementById('nav-koszyk').classList.add('active');
+
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || '{}');
+  }
+  function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function renderCart() {
+    const cart = getCart();
+    const container = document.getElementById('cartContainer');
+    container.innerHTML = '';
+
+    const items = Object.values(cart);
+    if(items.length === 0){
+      container.innerHTML = '<p class="empty-cart">Twój koszyk jest pusty.</p>';
+      return;
+    }
+
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+      <tr>
+        <th>Produkt</th>
+        <th>Marka</th>
+        <th>Cena</th>
+        <th>Ilość</th>
+        <th>Razem</th>
+        <th></th>
+      </tr>
+    `;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+
+    items.forEach(item => {
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+        <td>${item.name}</td>
+        <td>${item.brand}</td>
+        <td>${item.price.toFixed(2)} PLN</td>
+        <td>
+          <div class="qty-controls">
+            <button class="decrease" data-id="${item.id}">-</button>
+            <span>${item.quantity}</span>
+            <button class="increase" data-id="${item.id}">+</button>
+          </div>
+        </td>
+        <td>${(item.price * item.quantity).toFixed(2)} PLN</td>
+        <td><button class="remove-btn" data-id="${item.id}">Usuń</button></td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+
+    const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+    const totalDiv = document.createElement('div');
+    totalDiv.style.marginTop = '20px';
+    totalDiv.style.fontWeight = '700';
+    totalDiv.style.fontSize = '1.3rem';
+    totalDiv.style.textAlign = 'right';
+    totalDiv.textContent = `Łączna kwota: ${totalPrice.toFixed(2)} PLN`;
+
+    const orderBtn = document.createElement('button');
+    orderBtn.className = 'order-btn';
+    orderBtn.textContent = 'Zamów';
+    orderBtn.addEventListener('click', () => {
+      alert('Dziękujemy za złożenie zamówienia!');
+      localStorage.removeItem('cart');
+      renderCart();
+    });
+
+    container.appendChild(table);
+    container.appendChild(totalDiv);
+    container.appendChild(orderBtn);
+
+    // Event listeners for qty and remove buttons
+    tbody.querySelectorAll('.increase').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = e.currentTarget.dataset.id;
+        const cart = getCart();
+        cart[id].quantity++;
+        saveCart(cart);
+        renderCart();
+      });
+    });
+    tbody.querySelectorAll('.decrease').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = e.currentTarget.dataset.id;
+        const cart = getCart();
+        if(cart[id].quantity > 1){
+          cart[id].quantity--;
+          saveCart(cart);
+          renderCart();
+        }
+      });
+    });
+    tbody.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = e.currentTarget.dataset.id;
+        const cart = getCart();
+        delete cart[id];
+        saveCart(cart);
+        renderCart();
+      });
+    });
+  }
+
+  renderCart();
+
+  (function(){
+    function getUsers() {return JSON.parse(localStorage.getItem('users')||'[]');}
+    function getCurrentUser() {return localStorage.getItem('loggedUser')||null;}
+    function setCurrentUser(email) { if(email) localStorage.setItem('loggedUser', email); else localStorage.removeItem('loggedUser');}
+
+    const navAuthLinks = document.getElementById('navAuthLinks');
+
+    function updateUI() {
+      const loggedUser = getCurrentUser();
+      if(loggedUser){
+        navAuthLinks.innerHTML = `<span>Witaj, ${loggedUser}</span>`;
+      } else {
+        navAuthLinks.innerHTML = `
+          <a href="index.html#loginForm">Zaloguj</a>
+          <a href="index.html#registerForm">Zarejestruj</a>
+        `;
+      }
+    }
+    updateUI();
+  })();
+</script>
+
+</body>
+</html>

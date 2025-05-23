@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy – Logowanie</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #e7f0ff;
+    margin:0; padding:0;
+    color: #222;
+  }
+  header {
+    background: #a8d0ff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,80,0.15);
+  }
+  header h1 {
+    color: #003d7a;
+    margin: 0;
+    cursor: pointer;
+  }
+  main {
+    max-width: 400px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,80,0.15);
+  }
+  h2 {
+    text-align: center;
+    color: #003d7a;
+    margin-bottom: 1.5rem;
+  }
+  label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: #004a8a;
+  }
+  input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #a8d0ff;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  input[type="email"]:focus, input[type="password"]:focus {
+    border-color: #005bb5;
+    outline: none;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #005bb5;
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #003d7a;
+  }
+  .info {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  .info a {
+    color: #005bb5;
+    text-decoration: none;
+  }
+  .info a:hover {
+    text-decoration: underline;
+  }
+  .error {
+    color: #d20000;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 onclick="window.location.href='index.html'">Majerbuy</h1>
+</header>
+
+<main>
+  <h2>Logowanie</h2>
+  <div id="message"></div>
+  <form id="loginForm">
+    <label for="email">Email</label>
+    <input type="email" id="email" required placeholder="Twój email" />
+    <label for="password">Hasło</label>
+    <input type="password" id="password" required placeholder="Twoje hasło" />
+    <button type="submit">Zaloguj się</button>
+  </form>
+  <p class="info">Nie masz konta? <a href="rejestracja.html">Zarejestruj się</a></p>
+</main>
+
+<script>
+  const loginForm = document.getElementById('loginForm');
+  const message = document.getElementById('message');
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+
+    message.innerHTML = '';
+
+    let users = JSON.parse(localStorage.getItem('majerbuy_users')) || [];
+
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if(!user){
+      message.innerHTML = '<p class="error">Nieprawidłowy email lub hasło.</p>';
+      return;
+    }
+
+    // Zaloguj i zapisz w localStorage aktualnego usera
+    localStorage.setItem('majerbuy_user', JSON.stringify({email: user.email}));
+
+    // Przekieruj do panelu użytkownika
+    window.location.href = 'panel.html';
+  });
+</script>
+
+</body>
+</html>

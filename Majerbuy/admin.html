@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy – Panel admina</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #e7f0ff;
+    margin:0; padding:0;
+    color: #222;
+  }
+  header {
+    background: #a8d0ff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,80,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 {
+    color: #003d7a;
+    margin: 0;
+    cursor: pointer;
+  }
+  main {
+    max-width: 1000px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,80,0.15);
+  }
+  h2 {
+    color: #003d7a;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #a8d0ff;
+    color: #003d7a;
+  }
+  .empty {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-top: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 onclick="window.location.href='index.html'">Majerbuy - Panel Admin</h1>
+</header>
+
+<main>
+  <h2>Wszystkie zamówienia</h2>
+  <table id="orders-table">
+    <thead>
+      <tr>
+        <th>Użytkownik (email)</th>
+        <th>ID zamówienia</th>
+        <th>Data</th>
+        <th>Produkty</th>
+        <th>Dane wysyłki</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- zamówienia admina -->
+    </tbody>
+  </table>
+  <p class="empty" id="no-orders-msg">Brak zamówień.</p>
+</main>
+
+<script>
+  const users = JSON.parse(localStorage.getItem('majerbuy_users')) || [];
+  const tbody = document.querySelector('#orders-table tbody');
+  const noOrdersMsg = document.getElementById('no-orders-msg');
+
+  let allOrders = [];
+
+  users.forEach(user => {
+    if(user.zamowienia && user.zamowienia.length > 0){
+      user.zamowienia.forEach(order => {
+        allOrders.push({
+          email: user.email,
+          id: order.id,
+          data: order.data,
+          produkty: order.produkty,
+          daneWysylki: order.daneWysylki
+        });
+      });
+    }
+  });
+
+  if(allOrders.length === 0){
+    noOrdersMsg.style.display = 'block';
+  } else {
+    noOrdersMsg.style.display = 'none';
+    allOrders.forEach(o => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${o.email}</td>
+        <td>${o.id}</td>
+        <td>${new Date(o.data).toLocaleString()}</td>
+        <td><ul>${o.produkty.map(p => `<li>${p.nazwa} x${p.ilosc}</li>`).join('')}</ul></td>
+        <td>
+          <strong>Imię i nazwisko:</strong> ${o.daneWysylki.imie}<br>
+          <strong>Adres:</strong> ${o.daneWysylki.ulica} ${o.daneWysylki.kodPocztowy ? o.daneWysylki.kodPocztowy : ''} ${o.daneWysylki.miasto}<br>
+          <strong>Telefon:</strong> ${o.daneWysylki.telefon}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+</script>
+
+</body>
+</html>

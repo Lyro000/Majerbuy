@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy – Panel użytkownika</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #e7f0ff;
+    margin: 0; padding: 0;
+    color: #222;
+  }
+  header {
+    background: #a8d0ff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,80,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 {
+    color: #003d7a;
+    margin: 0;
+    cursor: pointer;
+  }
+  nav a {
+    text-decoration: none;
+    color: #003d7a;
+    font-weight: 700;
+    margin-left: 1rem;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  main {
+    max-width: 900px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,80,0.15);
+  }
+  h2 {
+    color: #003d7a;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .user-info {
+    font-weight: 600;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: #004a8a;
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #a8d0ff;
+    color: #003d7a;
+  }
+  .empty {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-top: 1rem;
+  }
+  button#logout {
+    background-color: #005bb5;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    display: block;
+    margin: 2rem auto 0;
+    transition: background-color 0.3s;
+  }
+  button#logout:hover {
+    background-color: #003d7a;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 onclick="window.location.href='index.html'">Majerbuy</h1>
+  <nav>
+    <a href="koszyk.html">Koszyk</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Twój panel użytkownika</h2>
+  <div class="user-info" id="user-email"></div>
+  <h3>Twoje zamówienia</h3>
+  <table id="orders-table">
+    <thead>
+      <tr>
+        <th>ID zamówienia</th>
+        <th>Data</th>
+        <th>Produkty</th>
+        <th>Dane wysyłki</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- zamówienia będą tu wstawiane -->
+    </tbody>
+  </table>
+  <p class="empty" id="no-orders-msg">Nie masz jeszcze żadnych zamówień.</p>
+  <button id="logout">Wyloguj się</button>
+</main>
+
+<script>
+  // Sprawdź czy zalogowany
+  const user = JSON.parse(localStorage.getItem('majerbuy_user'));
+
+  if(!user){
+    alert('Nie jesteś zalogowany. Przekierowanie do strony logowania...');
+    window.location.href = 'logowanie.html';
+  }
+
+  document.getElementById('user-email').textContent = `Zalogowano jako: ${user.email}`;
+
+  // Załaduj dane użytkownika i zamówienia
+  const users = JSON.parse(localStorage.getItem('majerbuy_users')) || [];
+  const currentUser = users.find(u => u.email === user.email);
+
+  const ordersTableBody = document.querySelector('#orders-table tbody');
+  const noOrdersMsg = document.getElementById('no-orders-msg');
+
+  if(currentUser && currentUser.zamowienia.length > 0) {
+    noOrdersMsg.style.display = 'none';
+    currentUser.zamowienia.forEach(z => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${z.id}</td>
+        <td>${new Date(z.data).toLocaleString()}</td>
+        <td>
+          <ul>${z.produkty.map(p => `<li>${p.nazwa} x${p.ilosc}</li>`).join('')}</ul>
+        </td>
+        <td>
+          <strong>Imię i nazwisko:</strong> ${z.daneWysylki.imie}<br>
+          <strong>Adres:</strong> ${z.daneWysylki.ulica} ${z.daneWysylki.nrDomu}, ${z.daneWysylki.kodPocztowy} ${z.daneWysylki.miasto}<br>
+          <strong>Telefon:</strong> ${z.daneWysylki.telefon}
+        </td>
+      `;
+      ordersTableBody.appendChild(tr);
+    });
+  } else {
+    noOrdersMsg.style.display = 'block';
+  }
+
+  document.getElementById('logout').addEventListener('click', () => {
+    localStorage.removeItem('majerbuy_user');
+    window.location.href = 'index.html';
+  });
+</script>
+
+</body>
+</html>
