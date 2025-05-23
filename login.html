@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy - Logowanie</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f9ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .login-container {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 15px;
+    box-shadow: 0 8px 22px rgb(37 99 235 / 0.25);
+    width: 320px;
+  }
+  h2 {
+    color: #2563eb;
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-align: center;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+  }
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 22px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: #2563eb;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    border: none;
+    padding: 12px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  button:hover,
+  button:focus {
+    background-color: #1e40af;
+    outline: none;
+  }
+  .error-message {
+    color: #ef4444;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .login-footer {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+  }
+  .login-footer a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .login-footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="login-container">
+  <h2>Logowanie</h2>
+  <div id="errorMessage" class="error-message" role="alert" aria-live="assertive"></div>
+  <form id="loginForm" novalidate>
+    <label for="email">Adres e-mail</label>
+    <input type="email" id="email" name="email" autocomplete="username" required />
+    <label for="password">Hasło</label>
+    <input type="password" id="password" name="password" autocomplete="current-password" required />
+    <button type="submit">Zaloguj się</button>
+  </form>
+  <div class="login-footer">
+    Nie masz konta? <a href="register.html">Zarejestruj się</a>
+  </div>
+</div>
+
+<script>
+  const loginForm = document.getElementById('loginForm');
+  const errorMessage = document.getElementById('errorMessage');
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    errorMessage.textContent = '';
+
+    const email = loginForm.email.value.trim();
+    const password = loginForm.password.value.trim();
+
+    if (!email || !password) {
+      errorMessage.textContent = 'Wszystkie pola są wymagane.';
+      return;
+    }
+
+    // Pobierz z localStorage użytkowników
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (!user) {
+      errorMessage.textContent = 'Nieprawidłowy e-mail lub hasło.';
+      return;
+    }
+
+    // Zaloguj - zapisz w localStorage
+    localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+    // Przekieruj do strony głównej lub innej
+    window.location.href = 'odziez.html';
+  });
+</script>
+</body>
+</html>

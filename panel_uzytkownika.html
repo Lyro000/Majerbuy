@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Majerbuy – Twoje zamówienia</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: #f9fcff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #cce6ff;
+      color: #00509e;
+    }
+    tr:hover {
+      background-color: #e6f2ff;
+    }
+    h2 {
+      color: #00509e;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Majerbuy</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Strona Główna</a></li>
+        <li><a href="buty.html">Buty</a></li>
+        <li><a href="odziez.html">Odzież</a></li>
+        <li><a href="akcesoria.html">Akcesoria</a></li>
+        <li><a href="koszyk.html">Koszyk</a></li>
+        <li><a href="panel_uzytkownika.html">Twoje zamówienia</a></li>
+        <li><a href="logowanie.html">Wyloguj się</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h2>Historia zamówień</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Numer zamówienia</th>
+          <th>Data</th>
+          <th>Produkty</th>
+          <th>Status</th>
+          <th>Kwota</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Przykładowe zamówienie -->
+        <tr>
+          <td>#12345</td>
+          <td>2025-05-23</td>
+          <td>Nike Air Max (1), Adidas Ultraboost (2)</td>
+          <td>W realizacji</td>
+          <td>1200 zł</td>
+        </tr>
+        <tr>
+          <td>#12344</td>
+          <td>2025-04-15</td>
+          <td>Adidas Czapka (1)</td>
+          <td>Wysłane</td>
+          <td>80 zł</td>
+        </tr>
+        <!-- Tu dynamicznie dodaj zamówienia z bazy -->
+      </tbody>
+    </table>
+  </main>
+  <footer>
+    <p>&copy; 2025 Majerbuy</p>
+  </footer>
+</body>
+</html>

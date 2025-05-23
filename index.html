@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy - Strona główna</title>
+<style>
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f9ff; color: #374151; min-height: 100vh; display: flex; flex-direction: column;
+  }
+  nav {
+    background-color: #2563eb; display: flex; justify-content: space-between; align-items: center; padding: 14px 30px; font-weight: 700;
+  }
+  nav .nav-left a,
+  nav .nav-right a,
+  nav .nav-right span {
+    color: white; text-decoration: none; margin-left: 20px; font-size: 1.1rem; position: relative; transition: color 0.3s ease;
+  }
+  nav .nav-left a:first-child {
+    margin-left: 0;
+  }
+  nav .nav-left a:hover,
+  nav .nav-right a:hover,
+  nav .nav-left a.active {
+    color: #bfdbfe;
+  }
+  nav .nav-left a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 0; width: 100%; height: 3px; background: #bfdbfe; border-radius: 3px;
+  }
+  nav .nav-right a {
+    cursor: pointer;
+  }
+
+  main {
+    flex-grow: 1;
+    padding: 60px 30px 50px;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  h1 {
+    font-weight: 900;
+    font-size: 2.8rem;
+    margin-bottom: 40px;
+    color: #2563eb;
+  }
+  .categories {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 60px;
+  }
+  .category-link {
+    background: white;
+    padding: 30px 50px;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgb(37 99 235 / 0.25);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #2563eb;
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .category-link:hover {
+    background-color: #bfdbfe;
+    box-shadow: 0 14px 35px rgb(37 99 235 / 0.5);
+  }
+
+  #loginForm, #registerForm {
+    background: white;
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 25px 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgb(37 99 235 / 0.25);
+    text-align: left;
+  }
+  #loginForm h2, #registerForm h2 {
+    color: #2563eb;
+    margin-bottom: 20px;
+    font-weight: 900;
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+    color: #2563eb;
+  }
+  input[type="email"], input[type="password"], input[type="text"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  button {
+    background-color: #2563eb;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #1d4ed8;
+  }
+  #formsWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  #panelUser {
+    display: none;
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgb(37 99 235 / 0.25);
+  }
+  #panelUser h2 {
+    color: #2563eb;
+    margin-bottom: 20px;
+    font-weight: 900;
+    text-align: center;
+  }
+  #panelUser ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  #panelUser ul li {
+    background: #e0e7ff;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 10px;
+  }
+  #panelUser button#logoutBtn {
+    margin-top: 20px;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <a href="index.html" id="nav-home" class="active">Strona główna</a>
+    <a href="odziez.html" id="nav-odziez">Odzież</a>
+    <a href="buty.html" id="nav-buty">Buty</a>
+    <a href="akcesoria.html" id="nav-akcesoria">Akcesoria</a>
+    <a href="koszyk.html" id="nav-koszyk">Koszyk</a>
+  </div>
+  <div class="nav-right" id="navAuthLinks"></div>
+</nav>
+
+<main>
+  <h1>Witaj w Majerbuy!</h1>
+  <div class="categories">
+    <a href="odziez.html" class="category-link">Odzież</a>
+    <a href="buty.html" class="category-link">Buty</a>
+    <a href="akcesoria.html" class="category-link">Akcesoria</a>
+  </div>
+
+  <div id="formsWrapper">
+    <!-- Logowanie -->
+    <form id="loginForm" aria-label="Formularz logowania">
+      <h2>Logowanie</h2>
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" required autocomplete="username" />
+      <label for="loginPassword">Hasło</label>
+      <input type="password" id="loginPassword" required autocomplete="current-password" />
+      <button type="submit">Zaloguj się</button>
+      <div id="loginMessage" style="color:red; margin-top:8px;"></div>
+    </form>
+
+    <!-- Rejestracja -->
+    <form id="registerForm" aria-label="Formularz rejestracji">
+      <h2>Rejestracja</h2>
+      <label for="registerEmail">Email</label>
+      <input type="email" id="registerEmail" required autocomplete="email" />
+      <label for="registerPassword">Hasło</label>
+      <input type="password" id="registerPassword" required autocomplete="new-password" />
+      <button type="submit">Zarejestruj się</button>
+      <div id="registerMessage" style="color:red; margin-top:8px;"></div>
+    </form>
+  </div>
+
+  <!-- Panel użytkownika -->
+  <section id="panelUser" aria-live="polite">
+    <h2>Panel użytkownika</h2>
+    <p>Witaj, <span id="userEmailDisplay"></span></p>
+    <h3>Twoje poprzednie zamówienia:</h3>
+    <ul id="userOrdersList">
+      <!-- tutaj pojawią się zamówienia -->
+    </ul>
+    <button id="logoutBtn">Wyloguj się</button>
+  </section>
+</main>
+
+<script>
+  // --- MAIN.JS LOGIKA LOGOWANIA, REJESTRACJI, PANELU UŻYTKOWNIKA I LOCALSTORAGE ---
+
+  // Funkcja do pobrania userów z localStorage (tablica obiektów {email, password})
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('users') || '[]');
+  }
+  // Funkcja do zapisu users
+  function saveUsers(users) {
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  // Funkcja do pobrania aktualnie zalogowanego usera (email)
+  function getCurrentUser() {
+    return localStorage.getItem('loggedUser') || null;
+  }
+  // Funkcja do ustawienia aktualnie zalogowanego usera
+  function setCurrentUser(email) {
+    if(email) localStorage.setItem('loggedUser', email);
+    else localStorage.removeItem('loggedUser');
+  }
+
+  // Wyświetlanie lub ukrywanie odpowiednich sekcji w zależności od statusu logowania
+  function updateUI() {
+    const loggedUser = getCurrentUser();
+    const navAuthLinks = document.getElementById('navAuthLinks');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const panelUser = document.getElementById('panelUser');
+    const userEmailDisplay = document.getElementById('userEmailDisplay');
+    const userOrdersList = document.getElementById('userOrdersList');
+
+    if(loggedUser) {
+      navAuthLinks.innerHTML = `<span>Witaj, ${loggedUser}</span>`;
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'none';
+      panelUser.style.display = 'block';
+      userEmailDisplay.textContent = loggedUser;
+
+      // Pobierz zamówienia usera
+      const allOrders = JSON.parse(localStorage.getItem('orders') || '{}');
+      const orders = allOrders[loggedUser] || [];
+      userOrdersList.innerHTML = '';
+
+      if(orders.length === 0) {
+        userOrdersList.innerHTML = '<li>Brak zamówień.</li>';
+      } else {
+        orders.forEach((order, idx) => {
+          const li = document.createElement('li');
+          li.textContent = `Zamówienie #${idx+1}: ${order.items.length} produktów, suma: ${order.total.toFixed(2)} PLN, data: ${new Date(order.date).toLocaleString()}`;
+          userOrdersList.appendChild(li);
+        });
+      }
+    } else {
+      navAuthLinks.innerHTML = `
+        <a href="#" id="linkLogin">Zaloguj</a>
+        <a href="#" id="linkRegister">Zarejestruj</a>
+      `;
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'none';
+      panelUser.style.display = 'none';
+
+      // Pokazuj login lub register po kliknięciu
+      document.getElementById('linkLogin').addEventListener('click', e => {
+        e.preventDefault();
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      });
+      document.getElementById('linkRegister').addEventListener('click', e => {
+        e.preventDefault();
+        registerForm.style.display = 'block';
+        loginForm.style.display = 'none';
+      });
+    }
+  }
+
+  // Obsługa logowania
+  document.getElementById('loginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+
+    const users = getUsers();
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if(user) {
+      setCurrentUser(email);
+      document.getElementById('loginMessage').textContent = '';
+      updateUI();
+    } else {
+      document.getElementById('loginMessage').textContent = 'Nieprawidłowy email lub hasło.';
+    }
+  });
+
+  // Obsługa rejestracji
+  document.getElementById('registerForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+    const password = document.getElementById('registerPassword').value;
+
+    if(!email || !password) {
+      document.getElementById('registerMessage').textContent = 'Wypełnij wszystkie pola.';
+      return;
+    }
+
+    const users = getUsers();
+    if(users.find(u => u.email === email)) {
+      document.getElementById('registerMessage').textContent = 'Ten email jest już zarejestrowany.';
+      return;
+    }
+
+    users.push({email, password});
+    saveUsers(users);
+    setCurrentUser(email);
+    document.getElementById('registerMessage').textContent = '';
+    updateUI();
+  });
+
+  // Wylogowanie
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    setCurrentUser(null);
+    updateUI();
+  });
+
+  // Inicjalizacja
+  updateUI();
+</script>
+</body>
+</html>

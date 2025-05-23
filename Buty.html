@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy - Buty</title>
+<style>
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f9ff; color: #374151; min-height: 100vh; display: flex; flex-direction: column;
+  }
+  nav {
+    background-color: #2563eb; display: flex; justify-content: space-between; align-items: center; padding: 14px 30px; font-weight: 700;
+  }
+  nav .nav-left a,
+  nav .nav-right a,
+  nav .nav-right span {
+    color: white; text-decoration: none; margin-left: 20px; font-size: 1.1rem; position: relative; transition: color 0.3s ease;
+  }
+  nav .nav-left a:first-child {
+    margin-left: 0;
+  }
+  nav .nav-left a:hover,
+  nav .nav-right a:hover,
+  nav .nav-left a.active {
+    color: #bfdbfe;
+  }
+  nav .nav-left a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 0; width: 100%; height: 3px; background: #bfdbfe; border-radius: 3px;
+  }
+  nav .nav-right a {
+    cursor: pointer;
+  }
+  main {
+    flex-grow: 1;
+    padding: 40px 30px 50px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-weight: 900;
+    font-size: 2.4rem;
+    margin-bottom: 30px;
+    color: #2563eb;
+    text-align: center;
+  }
+  .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 25px;
+  }
+  .product-card {
+    background: white;
+    padding: 18px 20px;
+    border-radius: 14px;
+    box-shadow: 0 8px 22px rgb(37 99 235 / 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .product-name {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #2563eb;
+    margin-bottom: 6px;
+  }
+  .product-brand {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    color: #4b5563;
+  }
+  .product-price {
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #1e40af;
+  }
+  .add-to-cart {
+    background-color: #2563eb;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .add-to-cart:hover {
+    background-color: #1d4ed8;
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <a href="index.html" id="nav-home">Strona główna</a>
+    <a href="odziez.html" id="nav-odziez">Odzież</a>
+    <a href="buty.html" id="nav-buty" class="active">Buty</a>
+    <a href="akcesoria.html" id="nav-akcesoria">Akcesoria</a>
+    <a href="koszyk.html" id="nav-koszyk">Koszyk</a>
+  </div>
+  <div class="nav-right" id="navAuthLinks"></div>
+</nav>
+
+<main>
+  <h1>Buty</h1>
+  <div class="product-list" aria-live="polite">
+    <div class="product-card">
+      <div class="product-name">Nike Air Max 270</div>
+      <div class="product-brand">Nike</div>
+      <div class="product-price">599 PLN</div>
+      <button class="add-to-cart" data-id="buty1" data-name="Nike Air Max 270" data-brand="Nike" data-price="599">Dodaj do koszyka</button>
+    </div>
+    <div class="product-card">
+      <div class="product-name">Adidas Ultraboost 22</div>
+      <div class="product-brand">Adidas</div>
+      <div class="product-price">499 PLN</div>
+      <button class="add-to-cart" data-id="buty2" data-name="Adidas Ultraboost 22" data-brand="Adidas" data-price="499">Dodaj do koszyka</button>
+    </div>
+    <div class="product-card">
+      <div class="product-name">New Balance Fresh Foam</div>
+      <div class="product-brand">New Balance</div>
+      <div class="product-price">379 PLN</div>
+      <button class="add-to-cart" data-id="buty3" data-name="New Balance Fresh Foam" data-brand="New Balance" data-price="379">Dodaj do koszyka</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Ten sam skrypt logowania/paska z index.html
+</script>
+
+<script>
+  // Aktywne podświetlenie linku w nawigacji
+  document.getElementById('nav-buty').classList.add('active');
+</script>
+
+<script>
+  // --- LOGIKA KOSZYKA ---
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || '{}');
+  }
+  function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', e => {
+      const btn = e.currentTarget;
+      const id = btn.dataset.id;
+      const name = btn.dataset.name;
+      const brand = btn.dataset.brand;
+      const price = parseFloat(btn.dataset

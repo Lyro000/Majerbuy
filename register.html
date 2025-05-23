@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Majerbuy - Rejestracja</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f9ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .register-container {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 15px;
+    box-shadow: 0 8px 22px rgb(37 99 235 / 0.25);
+    width: 320px;
+  }
+  h2 {
+    color: #2563eb;
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-align: center;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+  }
+  input[type="email"],
+  input[type="password"],
+  input[type="password"][name="confirmPassword"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 22px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: #2563eb;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    border: none;
+    padding: 12px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  button:hover,
+  button:focus {
+    background-color: #1e40af;
+    outline: none;
+  }
+  .error-message {
+    color: #ef4444;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .register-footer {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+  }
+  .register-footer a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .register-footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="register-container">
+  <h2>Rejestracja</h2>
+  <div id="errorMessage" class="error-message" role="alert" aria-live="assertive"></div>
+  <form id="registerForm" novalidate>
+    <label for="email">Adres e-mail</label>
+    <input type="email" id="email" name="email" autocomplete="email" required />
+    <label for="password">Hasło</label>
+    <input type="password" id="password" name="password" autocomplete="new-password" required minlength="6" />
+    <label for="confirmPassword">Potwierdź hasło</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" required minlength="6" />
+    <button type="submit">Zarejestruj się</button>
+  </form>
+  <div class="register-footer">
+    Masz już konto? <a href="login.html">Zaloguj się</a>
+  </div>
+</div>
+
+<script>
+  const registerForm = document.getElementById('registerForm');
+  const errorMessage = document.getElementById('errorMessage');
+
+  registerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    errorMessage.textContent = '';
+
+    const email = registerForm.email.value.trim();
+    const password = registerForm.password.value.trim();
+    const confirmPassword = registerForm.confirmPassword.value.trim();
+
+    if (!email || !password || !confirmPassword) {
+      errorMessage.textContent = 'Wszystkie pola są wymagane.';
+      return;
+    }
+
+    if (password.length < 6) {
+      errorMessage.textContent = 'Hasło musi mieć co najmniej 6 znaków.';
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      errorMessage.textContent = 'Hasła nie są takie same.';
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    if (users.find(u => u.email === email)) {
+      errorMessage.textContent = 'Użytkownik o takim e-mailu już istnieje.';
+      return;
+    }
+
+    users.push({ email, password });
+    localStorage.setItem('users', JSON.stringify(users));
+    alert('Rejestracja zakończona sukcesem. Możesz się teraz zalogować.');
+    window.location.href = 'login.html';
+  });
+</script>
+</body>
+</html>
